@@ -1,0 +1,90 @@
+{% include "header.html" %}
+
+<!-- Page Header -->
+<header 
+    class="masthead"
+    style="background-image: url('../static/assets/img/home-bg.jpg')" >
+
+
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="site-heading text-center">
+          <h1>Khesha's Blog</h1>
+          <span class="subheading">Musings, experiments, and a sprinkle of curiosity.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="container px-4 px-lg-5" aria-label="Blog posts">
+  <div class="row gx-4 gx-lg-5 justify-content-center">
+    <div class="col-md-10 col-lg-8 col-xl-7">
+
+      {% if all_posts|length == 0 %}
+        <div class="alert alert-info text-center">
+          Nothing here yet! Stay tuned for thoughts, tips, and stories straight from my notebook. 😊
+        </div>
+      {% endif %}
+
+      {% for post in all_posts %}
+      <article class="post-preview mb-5">
+        <a href="{{ url_for('show_post', post_id=post.id) }}" class="text-decoration-none">
+          <h2 class="post-title">{{ post.title }}</h2>
+          {% if post.subtitle %}
+          <h3 class="post-subtitle text-muted">{{ post.subtitle }}</h3>
+          {% endif %}
+        </a>
+
+        <p class="post-meta text-muted">
+          Written by 
+          {% if false %} 
+            {# Replace 'false' with your future profile route check #}
+            <a href="{{ url_for('profile', username=post.author.name) }}" class="fw-bold">
+              {{ post.author.name }}
+            </a>
+          {% else %}
+            <span class="fw-bold">{{ post.author.name }}</span>
+          {% endif %}
+          on 
+          <time datetime="{{ post.date }}">
+            {{ post.date }}
+          </time>
+
+          {% if current_user.is_authenticated and current_user.id == 1 %}
+            <a
+              class="text-danger ms-2"
+              href="{{ url_for('delete_post', post_id=post.id) }}"
+              onclick="return confirm('Are you sure you want to delete this post?')"
+              title="Delete post"
+            >✘</a>
+          {% endif %}
+        </p>
+      </article>
+
+      <hr class="my-4" />
+      {% endfor %}
+
+      <!-- Admin: New Post -->
+      {% if current_user.is_authenticated and current_user.id == 1 %}
+      <div class="d-flex justify-content-end mb-4">
+        <a class="btn btn-primary" href="{{ url_for('add_new_post') }}">
+          ✏️ Create New Post
+        </a>
+      </div>
+      {% endif %}
+
+      <!-- Pager (future pagination) -->
+      <div class="d-flex justify-content-end mb-4">
+        <a class="btn btn-secondary text-uppercase" href="#!">
+          ← Older Posts
+        </a>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+{% include "footer.html" %}
