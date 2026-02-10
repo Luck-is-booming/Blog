@@ -2,36 +2,23 @@ from datetime import date
 import os
 from dotenv import load_dotenv
 from flask import Flask, abort, render_template, redirect, url_for, flash
-from flask_bootstrap import Bootstrap5
+from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
-from flask_gravatar import Gravatar
+# from flask_gravatar import Gravatar
 from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy.orm import relationship
 # Import your forms from the forms.py
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 
-'''
-Make sure the required packages are installed: 
-Open the Terminal in PyCharm (bottom left). 
-
-On Windows type:
-python -m pip install -r requirements.txt
-
-On MacOS type:
-pip3 install -r requirements.txt
-
-This will install the packages from the requirements.txt for this project.
-'''
 load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 ckeditor = CKEditor(app)
-Bootstrap5(app)
+Bootstrap(app)
 
 # Configure Flask-Login
 login_manager = LoginManager()
@@ -44,14 +31,14 @@ def load_user(user_id):
 
 
 # For adding profile images to the comment section
-gravatar = Gravatar(app,
-                    size=100,
-                    rating='g',
-                    default='retro',
-                    force_default=False,
-                    force_lower=False,
-                    use_ssl=False,
-                    base_url=None)
+# Gravatar(app,
+#                     size=100,
+#                     rating='g',
+#                     default='retro',
+#                     force_default=False,
+#                     force_lower=False,
+#                     use_ssl=False,
+#                     base_url=None)
 
 # CREATE DATABASE
 class Base(DeclarativeBase):
